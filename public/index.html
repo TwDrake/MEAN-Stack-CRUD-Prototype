@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+
+<html ng-app = "twQuote">
+<head>
+ 	<meta charset = "utf-8">
+	<meta name = "viewport" content = "width=device-width, initial-scale=1">
+
+	<title>MEAN app</title>
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/default-theme.css" rel="stylesheet">
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+  <script src="js/angular.min.js"></script>
+<!--   // <script src="js/moment.min.js"></script> -->
+	<script src="js/core.js"></script>
+</head>
+<body>
+ 	<div ng-controller="mainController" ng-model="collection">
+    
+    <!--Login Page-->
+    <div class = "container c1" ng-hide="collection">
+
+      <div class="page-header">
+          <h1>Commercial Tribe User Quote Login</h1>
+      </div>
+
+      <div class="row">
+        <div class="row-lg-6">
+          <div class="input-group" class="length1">
+            <input type="text" class="form-control firstView" placeholder="Create username here and/or login below" ng-model = "userNew.user">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="createUser()">Create</button>
+            </span>
+          </div>
+        </div>
+        <div class="row-lg-6">
+          <div class="input-group input-length1">
+            <input type="text" class="form-control firstView" placeholder="Input valid username here" ng-model = "userName.user">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="logIn(userName.user)">&nbsp;LogIn&nbsp;</button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!--Manage Quotes Page-->
+ 		<div class = "container c2" ng-hide = "!collection">
+
+      <div class="top">
+        <user-status></user-status>
+        <button type="button" class="btn btn-default btn-sm logout" ng-click="logOut()">Logout</button>
+      </div>      
+       
+ 			<!-- HEADER -->
+ 			<div class="page-header">
+  				<h1>Commercial Tribe User Quote Collection</h1>
+			</div>
+
+ 			<!-- FORM TO ADD QUOTE AND AUTHOR -->
+ 			<div class = "input-group input-length2" id = "input">
+
+ 				<input type="text" class="form-control margin-style" placeholder="Type your favorite quote here!" ng-model="formData.text">
+
+ 				</br>
+ 				
+ 				<input type="text" class="form-control margin-style" placeholder="Type the corresponding author here!" ng-model="formData.author">
+
+ 			</div>
+      <div class="categories">
+        
+          <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Philosophy" ng-model="formData.inform.category">
+            Philosophy
+          </label>              
+        
+          <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Movie/Music" ng-model="formData.inform.category">
+            Movie/Music
+          </label>       
+        
+          <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Humor" ng-model="formData.inform.category">
+            Humor
+          </label>       
+        
+          <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="Wit" ng-model="formData.inform.category">
+            Wit
+          </label>       
+        
+          <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="Other" ng-model="formData.inform.category">
+            Other
+          </label>       
+        
+      </div>
+
+      </br>
+      
+ 			<button type="submit" class="btn btn-primary btn-lg" ng-model="button" ng-disabled="!formData.inform.category" ng-click="createQuote()">Add</button>
+      
+
+ 			<!-- QUOTE LIST -->
+      <div id="commentable-area" ng-model="commentForm">
+
+   			<div class="well well-lg" ng-repeat="quote in quotes" ng-model="exists">
+    				  <div class="time-stamp">Created: {{quote.inform[0].dateCreated}}</div>
+           
+              <button type="button" class="btn btn-default btn-sm" ng-click="showCommentForm($index)">Comment</button>
+
+              </br>
+              
+    					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quote.text}} 
+              </br> 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- {{quote.author}}
+             
+    					<button type="button" class="btn btn-default btn-sm" ng-click="deleteQuote(quote._id)">&nbsp;&nbsp;&nbsp;Delete&nbsp;&nbsp;&nbsp;</button>            
+
+              </br>
+
+              <!-- Comment Input -->
+              <div ng-hide="!commentForm[$index]" id="coms">
+                <input type="text" class="form-control" placeholder="Type your name here!" ng-model="commentData.name">
+
+                </br>
+                
+                <input type="text" class="form-control coms-style" placeholder="Comment here!" ng-model="commentData.comment">
+
+
+                <button type="submit" class="btn btn-primary"  ng-disabled="!(commentData.name && commentData.comment)" ng-click="addComment(quote._id, $index)">Add Comment</button>
+
+                </br>            
+
+              </div>
+
+              
+              <!-- Comments -->
+              <div class="panel panel-default" ng-hide="!exists[$index]">
+                <div class="panel-body" ng-repeat="comment in quote.comments">
+                  {{comment.name}}:
+                  </br>
+                  {{comment.comment}}&nbsp;
+                </div>
+              </div>
+  			</div>
+      </div>
+ 		</div> 		
+ 	</div>
+</body>
+</html>
+
+
